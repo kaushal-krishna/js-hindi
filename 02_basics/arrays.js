@@ -5,13 +5,13 @@ const marvelHeroes = [
   "Thor",
   "Captain America",
 ];
-// marvelHeroes.push("Shaktiman")
-// console.log(marvelHeroes.includes("Shaktiman"));
-// console.log(marvelHeroes);
+marvelHeroes.push("Shaktiman")
+console.log(marvelHeroes.includes("Shaktiman"));
+console.log(marvelHeroes);
 joinedHeroes = marvelHeroes.join(", ");
-// console.log(joinedHeroes);
+console.log(joinedHeroes);
 
-// slicedHeroes = marvelHeroes.splice(1, 4)
+slicedHeroes = marvelHeroes.slice(1, 4)
 
 console.log(marvelHeroes.splice(1, 4));
 console.log(marvelHeroes);

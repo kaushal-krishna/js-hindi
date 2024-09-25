@@ -9,4 +9,4 @@ const chainedNums = myNumbers
   .map((num) => num + 1)
   .filter((num) => num > 20);
 
-console.log(chainedNums);
+// console.log(chainedNums);
