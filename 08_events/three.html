@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chai aur javascript</title>
+  </head>
+  <body style="background-color: #212121; color: #ffffff; font-size: 20px;">
+    <h1>Chai aur javascript</h1>
+    <button id="start">Start</button>
+    <button id="stop">Stop</button>
+    <label>Time:</label>
+    <input id="time" readonly></input>
+  </body>
+  <script>
+    const start = document.querySelector("#start")
+    const stop = document.querySelector("#stop")
+    const timeBox = document.querySelector("#time")
+    let timeInterval;
+
+    start.addEventListener('click', () => {
+      startInterval()
+    })
+
+    stop.addEventListener('click', () => {
+      stopInterval()
+    })
+
+    function startInterval () {
+      timeBox.value = "Starting Clock..."
+      timeInterval = setInterval(()=>{
+        timeBox.value = new Date().toLocaleTimeString() 
+      }, 1000)
+      
+    }
+
+    function stopInterval() {
+      clearInterval(timeInterval)
+      timeBox.value = "Clock Removed"
+    }
+  </script>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React</title>
+  </head>
+  <body>
+    <button>Button Clicked</button>
+  </body>
+  <script>
+    class React {
+      constructor() {
+        this.library = "React";
+        this.server = "https://localhost:3000";
+        document
+          .querySelector("button")
+          .addEventListener("click", this.handleClick.bind(this)); // - Also binds/attach's the constructor's `this` object to `this` object of handleClick
+      }
+
+      handleClick() {
+        console.log("Button clicked");
+        console.log(this); // - Comes with main `this` object
+        console.log(this.server); // - Access to server from main `this` object
+      }
+    }
+
+    const app = new React()
+  </script>
+</html>

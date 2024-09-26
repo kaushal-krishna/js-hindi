@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Calculator | Kaushal</title>
+    <!-- <link rel="stylesheet" type="text/css" href="style.css" /> -->
+    <style>
+        *{
+  margin: 0;
+  padding: 0;
+  /* Padding and border are included in the element's total width and height */
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+
+  font:bold 14px Aria,sans-serif;
+}
+
+html {
+  height: 100%;
+  background-color: #212121;
+  background-size: cover;
+}
+
+
+#calculator {
+  width: 325px;
+  height: 340px;
+  margin: 100px auto;
+  padding: 20px 20px 0px 20px;
+  background: #2e3d44;
+  background: linear-gradient(#0757ce, #8bceec);
+  border-radius: 3px;
+  box-shadow: 0px 4px #009de4, 0px 10px 15px rgba(0,0,0,0.2);
+}
+
+#resultScreen {
+  float: right;
+  height: 40px;
+  width: 212px;
+  padding: 0 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  box-shadow: inset 0px 4px rgba(0, 0, 0, 0.2);
+  font-size: 17px;
+  line-height: 40px;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  text-align: right;
+  letter-spacing: 1px;
+}
+
+#valuesScreen {
+  height: 50px;
+  width: 285px;
+  margin: 20px 0;
+  padding: 0 10px;
+  background: rgb(22, 7, 49);
+  border-radius: 3px;
+  font-size: 17px;
+  line-height: 40px;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  text-align: right;
+  letter-spacing: 1px;
+}
+
+.keys, .top {
+  overflow: hidden;
+}
+
+/* Applying css on all the keys */
+.keys span, #clear {
+  float: left;
+  position: relative;
+  top: 0;
+  /* Specifies the type of cursor to be displayed when pointing on an element. */
+  cursor: pointer;
+
+  width: 66px;
+  height: 36px;
+
+  background: white;
+  border-radius: 3px;
+  box-shadow: 0px 4px rgba(0, 0, 0, 0.2);
+
+  margin: 0 7px 11px 0;
+
+  color: #888;
+  line-height: 36px;
+  text-align: center;
+
+  /* prevent selection of text inside keys */
+  user-select: none;
+
+  /* Transitions allows you to change property values smoothly  */
+  transition: all 0.2s ease;
+}
+
+.keys span.operator {
+  background: #FFF0F5;
+  margin-right: 0; /* 7px in previous setting*/
+}
+
+/* Eval Button */
+.keys span.eval {
+  background: #f1ff92;
+  box-shadow: 0px 4px #9da853;
+  color: #888e5f;
+}
+
+.keys span.eval:hover {
+  background: #abb850;
+  box-shadow: 0px 4px #717a33;
+  color: #ffffff;
+}
+
+.keys span.eval:active {
+  box-shadow: 0px 0px #717a33;
+  top: 4px;
+}
+
+/* Clear Button */
+#clear {
+  background: #ff9fa8;
+  box-shadow: 0px 4px #ff7c87;
+  color: white;
+}
+
+#clear:hover {
+  background: #f68991;
+  box-shadow: 0px 4px #d3545d;
+  color: white;
+}
+
+#clear:active {
+  top: 4px;
+  box-shadow: 0px 0px #d3545d;
+}
+
+/* Other Buttons */
+.keys span:hover {
+  background: #9c89f6;
+  box-shadow: 0px 4px #6b54d3;
+  color: white;
+}
+
+.keys span:active {
+  box-shadow: 0px 0px #6b54d3;
+  top: 4px;
+}
+    </style>
+  </head>
+  <body>
+    <div id="calculator">
+      <div class="top">
+        <span id="clear">C</span>
+        <div id="resultScreen"></div>
+      </div>
+
+      <div class="keys">
+        <span>7</span>
+        <span>8</span>
+        <span>9</span>
+        <span class="operator">+</span>
+        <span>4</span>
+        <span>5</span>
+        <span>6</span>
+        <span class="operator">-</span>
+        <span>1</span>
+        <span>2</span>
+        <span>3</span>
+        <span class="operator">÷</span>
+        <span>0</span>
+        <span>.</span>
+        <span class="eval">=</span>
+        <span class="operator">x</span>
+      </div>
+      <div id="valuesScreen"></div>
+    </div>
+    <script>
+      const numberedKeys = document.querySelectorAll(
+        "div span:not(.operator):not(.eval)"
+      );
+      const operatorKeys = document.querySelectorAll("span.operator");
+      const evalKey = document.querySelector(".eval");
+      const clearKey = document.querySelector("#clear");
+      const resultScreen = document.querySelector("#resultScreen");
+      const valuesScreen = document.querySelector("#valuesScreen");
+
+      const values = [];
+
+      numberedKeys.forEach((key) => {
+        key.addEventListener("click", (e) => {
+          if (isNaN(values[values.length - 1])) {
+            resultScreen.innerHTML = "";
+          }
+          setResultScreenValues(e.target.innerHTML);
+        });
+      });
+
+      document.addEventListener("keydown", (event) => {
+        const key = event.key;
+        if (!isNaN(key) || ["+", "-", "*", "/"].includes(key)) {
+          if (!isNaN(key)) {
+            if (isNaN(values[values.length - 1])) {
+              resultScreen.innerHTML = "";
+            }
+          }
+          setResultScreenValues(key);
+        }
+        if (key === "=" || (key === "Enter" && values.length !== 0)) {
+          evalKey.click();
+        } else if (key === "Backspace" || key === "Delete") {
+          clearKey.click();
+        }
+      });
+
+      operatorKeys.forEach((key) => {
+        key.addEventListener("click", (e) => {
+          setResultScreenValues(e.target.innerHTML);
+        });
+      });
+
+      evalKey.addEventListener("click", () => {
+        try {
+          if (isNaN(values[values.length - 1])) {
+            values.splice(values.length - 1, 1);
+          }
+
+          const result = evaluateValues(values);
+          resultScreen.innerHTML = "I <3 you, value: " + result;
+          values.length = 0;
+          valuesScreen.innerHTML = result;
+          values.push(result);
+        } catch (error) {
+          resultScreen.innerHTML = "Error";
+        }
+      });
+
+      clearKey.addEventListener("click", () => {
+        values.length = 0;
+        resultScreen.innerHTML = "";
+        valuesScreen.innerHTML = "";
+      });
+
+      function setResultScreenValues(value) {
+        const operators = ["+", "-", "x", "÷"];
+        let isOperator = false;
+
+        for (let i = 0; i < operators.length && !isOperator; i++) {
+          const oprt = operators[i];
+          if (oprt === value && !isNaN(values[values.length - 1])) {
+            resultScreen.innerHTML = "";
+            isOperator = true;
+          }
+        }
+
+        if (values.length === 19) {
+          throw new Error("Maximum values reached");
+        } else {
+          if (!isNaN(value) || isOperator) {
+            resultScreen.append((document.createTextNode = value));
+            collectValues(isOperator ? value : parseInt(value));
+          } else {
+            throw new Error("Value isn't valid");
+          }
+        }
+      }
+
+      function collectValues(value) {
+        values.push(value);
+        valuesScreen.innerHTML = values.toString().replace(/,/g, "");
+      }
+
+      function evaluateValues(values) {
+        const expressions = values
+          .join("")
+          .replace(/x/g, "*")
+          .replace(/÷/g, "/");
+        return eval(expressions);
+      }
+    </script>
+  </body>
+</html>

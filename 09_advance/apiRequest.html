@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AJAX | Chai aur Javascript</title>
+    <style>
+      form {
+        display: flex;
+        justify-content: flex-start;
+      }
+
+      #methodInput,
+      #urlInput,
+      #sendBtn {
+        background-color: #313131;
+        border: 0;
+        color: #ffffff;
+        padding: 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        margin-left: 10px;
+      }
+
+      #urlInput {
+        cursor: text;
+      }
+
+      #sendBtn:active {
+        background-color: #2b2b2b;
+      }
+
+      pre {
+        padding: 10px;
+        margin-left: 10px;
+        background-color: #0c0c0c;
+        border-radius: 5px;
+        font-size: 14px;
+        line-height: 1.5;
+        max-width: fit-content;
+        overflow-y: scroll;
+        max-height: 73vh;
+      }
+      .string {
+        color: green;
+      }
+      .number {
+        color: darkorange;
+      }
+      .boolean {
+        color: blue;
+      }
+      .null {
+        color: magenta;
+      }
+      .key {
+        color: red;
+      }
+    </style>
+  </head>
+  <body style="background-color: #212121; color: #ffffff">
+    <h1 style="font-family: Calibri; margin-left: 10px">Send XHR Request</h1>
+    <form>
+      <select id="methodInput">
+        <option value="GET">GET</option>
+        <option value="POST">POST</option>
+        <option value="PUT">PUT</option>
+        <option value="DELETE">DELETE</option>
+      </select>
+      <input type="url" id="urlInput" placeholder="Enter requestUrl" />
+      <button type="submit" id="sendBtn">Create and Send</button>
+    </form>
+  </body>
+  <script>
+    function syntaxHighlight(json) {
+      if (typeof json != "string") {
+        json = JSON.stringify(json, undefined, 2);
+      }
+      json = json
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+      return json.replace(
+        /("(\\u[\da-fA-F]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+        function (match) {
+          let cls = "number";
+          if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+              cls = "key";
+            } else {
+              cls = "string";
+            }
+          } else if (/true|false/.test(match)) {
+            cls = "boolean";
+          } else if (/null/.test(match)) {
+            cls = "null";
+          }
+          return '<span class="' + cls + '">' + match + "</span>";
+        }
+      );
+    }
+
+    const form = document.querySelector("form");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const method = document.querySelector("#methodInput").value;
+      const requestUrl = document.querySelector("#urlInput").value;
+      const xhr = new XMLHttpRequest();
+
+      xhr.open(method, requestUrl);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          const data = JSON.parse(xhr.response);
+          const dataElement = document.createElement("pre");
+          dataElement.innerHTML = syntaxHighlight(
+            JSON.stringify(data, undefined, 2)
+          );
+          document.body.appendChild(dataElement);
+        }
+      };
+      xhr.send();
+    });
+  </script>
+</html>

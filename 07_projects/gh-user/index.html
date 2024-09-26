@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Github User | AJAX</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      form {
+        display: flex;
+        justify-content: flex-start;
+      }
+
+      #methodInput,
+      #urlInput,
+      #sendBtn {
+        background-color: #313131;
+        border: 0;
+        color: #ffffff;
+        padding: 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        margin-left: 10px;
+      }
+
+      #urlInput {
+        cursor: text;
+      }
+
+      #sendBtn:active {
+        background-color: #2b2b2b;
+      }
+    </style>
+  </head>
+  <body style="background-color: #212121; color: #ffffff">
+    <main class="container">
+      <div class="card">
+        <img alt="User image" class="card__image" />
+        <div class="card__text">
+          <h2>...</h2>
+          <p>...</p>
+        </div>
+        <ul class="card__info">
+          <li>
+            <span class="card__info__stats">...</span>
+            <span>following</span>
+          </li>
+          <li>
+            <span class="card__info__stats">...</span>
+            <span>followers</span>
+          </li>
+        </ul>
+      </div>
+    </main>
+  </body>
+  <script>
+    const avatar = document.querySelector(".card__image");
+    const name = document.querySelector(".card__text h2");
+    const bio = document.querySelector(".card__text p");
+    const following = document.querySelector(
+      "li:first-child .card__info__stats"
+    );
+    const followers = document.querySelector(
+      "li:last-child .card__info__stats"
+    );
+
+    document.addEventListener("DOMContentLoaded", (e) => {
+      e.preventDefault();
+      const method = 'GET'
+      const requestUrl = "https://api.github.com/users/kaushal-krishna";
+      const xhr = new XMLHttpRequest();
+
+      const card = document.createElement("div");
+
+      xhr.open(method, requestUrl);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          const data = JSON.parse(this.response);
+          avatar.setAttribute("src", data.avatar_url)
+          name.innerHTML = data.name
+          bio.innerHTML = data.bio
+          following.innerHTML = data.following
+          followers.innerHTML = data.followers
+        }
+      };
+      xhr.send();
+    });
+  </script>
+</html>
